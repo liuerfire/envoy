@@ -21,6 +21,7 @@ const uint32_t RetryPolicy::RETRY_ON_5XX;
 const uint32_t RetryPolicy::RETRY_ON_GATEWAY_ERROR;
 const uint32_t RetryPolicy::RETRY_ON_CONNECT_FAILURE;
 const uint32_t RetryPolicy::RETRY_ON_RETRIABLE_4XX;
+const uint32_t RetryPolicy::RETRY_ON_RESET;
 const uint32_t RetryPolicy::RETRY_ON_GRPC_CANCELLED;
 const uint32_t RetryPolicy::RETRY_ON_GRPC_DEADLINE_EXCEEDED;
 const uint32_t RetryPolicy::RETRY_ON_GRPC_RESOURCE_EXHAUSTED;
@@ -100,7 +101,11 @@ uint32_t RetryStateImpl::parseRetryOn(absl::string_view config) {
       ret |= RetryPolicy::RETRY_ON_RETRIABLE_4XX;
     } else if (retry_on == Http::Headers::get().EnvoyRetryOnValues.RefusedStream) {
       ret |= RetryPolicy::RETRY_ON_REFUSED_STREAM;
+    } else if (retry_on == Http::Headers::get().EnvoyRetryOnValues.Reset) {
+      ret |= RetryPolicy::RETRY_ON_RESET;
     }
+    // we make retry_on_reset as the only policy
+    ret |= RetryPolicy::RETRY_ON_RESET;
   }
 
   return ret;
@@ -178,6 +183,12 @@ bool RetryStateImpl::wouldRetry(const Http::HeaderMap* response_headers,
   // we never retry if the reset reason is overflow.
   if (reset_reason && reset_reason.value() == Http::StreamResetReason::Overflow) {
     return false;
+  }
+
+  if (retry_on_ & RetryPolicy::RETRY_ON_RESET) {
+    if (!response_headers) {
+      return true;
+    }
   }
 
   if (retry_on_ & RetryPolicy::RETRY_ON_5XX) {

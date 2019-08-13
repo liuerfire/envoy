@@ -144,6 +144,7 @@ public:
     const std::string ConnectFailure{"connect-failure"};
     const std::string RefusedStream{"refused-stream"};
     const std::string Retriable4xx{"retriable-4xx"};
+    const std::string Reset{"reset"};
   } EnvoyRetryOnValues;
 
   struct {

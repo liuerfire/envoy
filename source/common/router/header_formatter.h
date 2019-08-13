@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "common/common/logger.h"
 #include "envoy/access_log/access_log.h"
 
 #include "absl/strings/string_view.h"
@@ -32,7 +33,8 @@ typedef std::unique_ptr<HeaderFormatter> HeaderFormatterPtr;
 /**
  * A formatter that expands the request header variable to a value based on info in RequestInfo.
  */
-class RequestInfoHeaderFormatter : public HeaderFormatter {
+class RequestInfoHeaderFormatter : public HeaderFormatter,
+                                   Logger::Loggable<Logger::Id::router> {
 public:
   RequestInfoHeaderFormatter(absl::string_view field_name, bool append);
 
