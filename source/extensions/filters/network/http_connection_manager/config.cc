@@ -128,7 +128,7 @@ HttpConnectionManagerConfig::HttpConnectionManagerConfig(
       route_config_provider_manager_(route_config_provider_manager),
       http2_settings_(Http::Utility::parseHttp2Settings(config.http2_protocol_options())),
       http1_settings_(Http::Utility::parseHttp1Settings(config.http_protocol_options())),
-      idle_timeout_(PROTOBUF_GET_OPTIONAL_MS(config, idle_timeout)),
+      idle_timeout_(PROTOBUF_GET_MS_OR_DEFAULT(config, idle_timeout, IdleTimeoutMs)),
       stream_idle_timeout_(
           PROTOBUF_GET_MS_OR_DEFAULT(config, stream_idle_timeout, StreamIdleTimeoutMs)),
       drain_timeout_(PROTOBUF_GET_MS_OR_DEFAULT(config, drain_timeout, 5000)),
