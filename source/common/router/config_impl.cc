@@ -693,8 +693,11 @@ void RegexRouteEntryImpl::rewritePathHeader(Http::HeaderMap& headers,
 
 RouteConstSharedPtr RegexRouteEntryImpl::matches(const Http::HeaderMap& headers,
                                                  uint64_t random_value) const {
+  const Http::HeaderString& path = headers.Path()->value();
+  if (path.size() > 30 * 1024) {
+    return nullptr;
+  }
   if (RouteEntryImplBase::matchRoute(headers, random_value)) {
-    const Http::HeaderString& path = headers.Path()->value();
     const char* query_string_start = Http::Utility::findQueryStringStart(path);
     if (std::regex_match(path.c_str(), query_string_start, regex_)) {
       return clusterEntry(headers, random_value);
