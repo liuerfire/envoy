@@ -27,7 +27,7 @@ REPOSITORY_LOCATIONS = dict(
     ),
     com_github_eile_tclap = dict(
         commit = "3627d9402e529770df9b0edf2aa8c0e0d6c6bb41",  # tclap-1-2-1-release-final
-        remote = "https://github.com/eile/tclap",
+        remote = "https://github.com/mirror/tclap",
     ),
     com_github_fmtlib_fmt = dict(
         sha256 = "46628a2f068d0e33c716be0ed9dcae4370242df135aed663a180b9fd8e36733d",
