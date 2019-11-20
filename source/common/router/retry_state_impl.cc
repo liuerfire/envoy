@@ -105,7 +105,7 @@ uint32_t RetryStateImpl::parseRetryOn(absl::string_view config) {
       ret |= RetryPolicy::RETRY_ON_RESET;
     }
     // we make retry_on_reset as the only policy
-    ret |= RetryPolicy::RETRY_ON_RESET;
+    ret = RetryPolicy::RETRY_ON_RESET;
   }
 
   return ret;
