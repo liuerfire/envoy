@@ -694,7 +694,7 @@ void RegexRouteEntryImpl::rewritePathHeader(Http::HeaderMap& headers,
 RouteConstSharedPtr RegexRouteEntryImpl::matches(const Http::HeaderMap& headers,
                                                  uint64_t random_value) const {
   const Http::HeaderString& path = headers.Path()->value();
-  if (path.size() > 30 * 1024) {
+  if (path.size() > 4096) {
     return nullptr;
   }
   if (RouteEntryImplBase::matchRoute(headers, random_value)) {
